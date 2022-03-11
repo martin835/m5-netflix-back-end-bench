@@ -6,7 +6,21 @@
     "Poster": "http://localhost:3001/public/img/posters/eabenr2qcl0mbnk2d.jpg",
     "createdAt": "2022-03-11T11:14:36.757Z",
     "imdbID": "eabenr2qcl0mbnk2d",
-    "updatedAt": "2022-03-11T12:56:22.240Z"
+    "updatedAt": "2022-03-11T14:27:29.509Z",
+    "comments": [
+      {
+        "elementId": "eabenrbugl0mijf5q",
+        "comment": "extend strategic communities",
+        "rate": 4,
+        "createdAt": "2022-03-11T14:27:21.086Z"
+      },
+      {
+        "elementId": "eabenrbugl0mijlnp",
+        "comment": "leverage proactive partnerships",
+        "rate": 4,
+        "createdAt": "2022-03-11T14:27:29.509Z"
+      }
+    ]
   },
   {
     "Title": "architect sticky web-readiness",

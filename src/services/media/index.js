@@ -139,6 +139,46 @@ mediaRouter.patch(
   }
 );
 
+// add comments to a medium
+mediaRouter.put("/:oneMediaId/comment", async (req, res, next) => {
+  try {
+    /* const { text, userName } = req.body; */
+    const { comment, rate } = req.body;
+    const commentOjb = {
+      elementId: uniqid(),
+      comment,
+      rate,
+      createdAt: new Date(),
+    };
+
+    const mediaArray = await getMedia();
+
+    const mediumIndex = mediaArray.findIndex(
+      (medium) => medium.imdbID === req.params.oneMediaId
+    );
+    if (!mediumIndex == -1) {
+      res.status(404).send({
+        message: `medium with ${req.params.oneMediaId} is not found!`,
+      });
+    }
+    const oldMedium = mediaArray[mediumIndex];
+    oldMedium.comments = oldMedium.comments || [];
+    const updatedMedium = {
+      ...oldMedium,
+
+      comments: [...oldMedium.comments, commentOjb],
+      updatedAt: new Date(),
+    };
+    mediaArray[mediumIndex] = updatedMedium;
+    await writeMedia(mediaArray);
+
+    res.send(updatedMedium);
+  } catch (error) {
+    console.log(error);
+    res.send(500).send({ message: error.message });
+  }
+});
+
 //7 - send confirmation email to author when oneMedia is created
 // This  ⬇️ ⬇️ ⬇️  is an example how to send an email with dedicated endpoint.
 //If we want to send confirmation email after an oneMedia is created,
