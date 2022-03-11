@@ -10,6 +10,7 @@ import multer from "multer";
 import { extname } from "path";
 import { getMedia, writeMedia } from "../../lib/fs-tools.js";
 import { saveCoversPictures } from "../../lib/fs-tools.js";
+import { update } from "tar";
 
 const mediaRouter = express.Router();
 //1
@@ -44,25 +45,56 @@ mediaRouter.post("/", newMediaValidation, async (req, res, next) => {
 //2
 mediaRouter.get("/", async (req, res) => {
   console.log("this is request get all media: ");
-  res.send();
+  const media = await getMedia();
+
+  res.send(media);
 });
 
 //3
 mediaRouter.get("/:oneMediaId", async (req, res) => {
-  console.log("this is request get oneMedia: ", req.params);
-  res.send();
+  console.log("this is request get oneMedia: ", req.params.oneMediaId);
+  const media = await getMedia();
+
+  const foundmedia = media.find(
+    (media) => media.imdbID === req.params.oneMediaId
+  );
+
+  res.send(foundmedia);
 });
 
 //4
 mediaRouter.put("/:oneMediaId", async (req, res) => {
   console.log("this is request edit oneMedia: ", req.params);
-  res.send();
+  const media = await getMedia();
+
+  const index = media.findIndex(
+    (media) => media.imdbID === req.params.oneMediaId
+  );
+  const oldMedia = media[index];
+  const updatedMedia = {
+    ...oldMedia,
+    ...req.body,
+    updatedAt: new Date(),
+  };
+
+  media[index] = updatedMedia;
+
+  await writeMedia(media);
+
+  res.send(updatedMedia);
 });
 
 //5
 mediaRouter.delete("/:oneMediaId", async (req, res) => {
   console.log("this is request delete oneMedia: ", req.params);
-  res.send();
+  const media = await getMedia();
+  const remainingMedia = media.filter(
+    (medium) => medium.imdbID !== req.params.oneMediaId
+  );
+
+  await writeMedia(remainingMedia);
+
+  res.status(204).send();
 });
 
 //6 - upload cover image for media
