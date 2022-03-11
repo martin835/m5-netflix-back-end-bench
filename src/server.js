@@ -1,6 +1,7 @@
 import express from "express";
 import listEndpoints from "express-list-endpoints";
 import cors from "cors";
+import mediaRouter from "./services/media/index.js";
 
 const server = express();
 
@@ -29,15 +30,17 @@ server.use(
 server.use(express.json());
 
 // *********************************** ENDPOINTS *************************************
-/* server.use("/media", mediaRouter);
-server.use("/reviews", reviewsRouter); */
+server.use("/media", mediaRouter);
+//server.use("/reviews", reviewsRouter);
 
 // ********************************** ERROR HANDLERS *********************************
 /* 
 server.use(badRequestHandler);
 server.use(unauthorizedHandler);
 server.use(notFoundHandler);
-server.use(genericErrorHandler) */ console.table(listEndpoints(server));
+server.use(genericErrorHandler) */
+
+console.table(listEndpoints(server));
 
 server.listen(port, () => {
   console.log(`Server listening on port ${port}`);
