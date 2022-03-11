@@ -122,9 +122,8 @@ mediaRouter.patch(
     );
     const oldMedium = mediaArray[index];
 
-    //this shouldn't be path, but URL  ⬇️⬇️⬇️⬇️
     const posterUrl =
-      "http://localhost:3001/public/img/posters/" +
+      "http://localhost:3001/img/posters/" +
       req.params.oneMediaId +
       extname(req.file.originalname);
 

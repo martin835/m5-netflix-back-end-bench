@@ -12,9 +12,10 @@
     "Title": "architect sticky web-readiness",
     "Year": "1990",
     "Type": "movie",
-    "Poster": "http://placeimg.com/640/480/sports",
+    "Poster": "http://localhost:3001/img/posters/eabenr2qcl0mbnkyq.jpeg",
     "createdAt": "2022-03-11T11:14:37.922Z",
-    "imdbID": "eabenr2qcl0mbnkyq"
+    "imdbID": "eabenr2qcl0mbnkyq",
+    "updatedAt": "2022-03-11T13:13:21.189Z"
   },
   {
     "Title": "syndicate real-time portals",
