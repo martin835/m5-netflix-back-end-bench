@@ -19,4 +19,4 @@ export const writeMedia = (content) => writeJSON(mediaJSONPath, content);
 export const savePostersPictures = (filename, contentAsABuffer) =>
   writeFile(join(postersPublicFolderPath, filename), contentAsABuffer);
 
-/* export const getAuthorsReadableStream = () => createReadStream(authorsJSONPath); */
+export const getMediaReadableStream = () => createReadStream(mediaJSONPath);

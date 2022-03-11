@@ -2,6 +2,7 @@ import express from "express";
 import listEndpoints from "express-list-endpoints";
 import cors from "cors";
 import mediaRouter from "./services/media/index.js";
+import filesRouter from "./services/files/index.js";
 import {
   badRequestHandler,
   unauthorizedHandler,
@@ -12,10 +13,13 @@ import { join } from "path";
 
 const server = express();
 const publicFolderPath = join(process.cwd(), "./public");
-/* const port = process.env.PORT; */
-const port = 3001;
+
+const port = process.env.PORT;
+
 const whitelist = [process.env.FE_DEV_URL, process.env.FE_PROD_URL];
+
 // *********************************** MIDDLEWARES ***********************************
+
 server.use(express.static(publicFolderPath));
 
 server.use(
@@ -38,6 +42,7 @@ server.use(express.json());
 
 // *********************************** ENDPOINTS *************************************
 server.use("/media", mediaRouter);
+server.use("/files", filesRouter);
 //server.use("/reviews", reviewsRouter);
 
 // ********************************** ERROR HANDLERS *********************************
