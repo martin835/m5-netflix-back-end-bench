@@ -1,17 +1,15 @@
 import express from "express";
-import fs from "fs-extra";
-import { fileURLToPath } from "url";
-import { dirname, join } from "path";
-import uniqid from "uniqid";
-import createHttpError from "http-errors";
 import { validationResult } from "express-validator";
-import { newMediaValidation } from "./validations.js";
+import createHttpError from "http-errors";
 import multer from "multer";
 import { extname } from "path";
-import { getMedia, writeMedia } from "../../lib/fs-tools.js";
-import { savePostersPictures } from "../../lib/fs-tools.js";
-import { update } from "tar";
-import { write } from "fs";
+import uniqid from "uniqid";
+import {
+  getMedia,
+  savePostersPictures,
+  writeMedia,
+} from "../../lib/fs-tools.js";
+import { newMediaValidation } from "./validations.js";
 
 const mediaRouter = express.Router();
 
@@ -183,7 +181,7 @@ mediaRouter.put("/:oneMediaId/comment", async (req, res, next) => {
 //8 delete a comment
 
 mediaRouter.delete(
-  "/:oneMediaId/comment/:commentId.",
+  "/:oneMediaId/comment/:commentId",
   async (req, res, next) => {
     console.log("this is requested  one comment: ", req.params);
     const mediaArray = await getMedia();
