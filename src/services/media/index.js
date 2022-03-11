@@ -4,14 +4,41 @@ import { fileURLToPath } from "url";
 import { dirname, join } from "path";
 import uniqid from "uniqid";
 import createHttpError from "http-errors";
+import { validationResult } from "express-validator";
+import { newMediaValidation } from "./validations.js";
 import multer from "multer";
 import { extname } from "path";
+import { getMedia, writeMedia } from "../../lib/fs-tools.js";
+import { saveCoversPictures } from "../../lib/fs-tools.js";
 
 const mediaRouter = express.Router();
 //1
-mediaRouter.post("/", async (req, res, next) => {
+mediaRouter.post("/", newMediaValidation, async (req, res, next) => {
   console.log("this is request post media: ");
-  res.send();
+
+  try {
+    const errorsList = validationResult(req);
+    if (errorsList.isEmpty()) {
+      const newMedia = {
+        ...req.body,
+        createdAt: new Date(),
+        imdbID: uniqid(),
+      };
+      const mediaArray = await getMedia();
+      mediaArray.push(newMedia);
+      await writeMedia(mediaArray);
+
+      res.status(201).send({ imdbID: newMedia.imdbID });
+    } else {
+      next(
+        createHttpError(400, "Some errors occurred in req body", {
+          errorsList,
+        })
+      );
+    }
+  } catch (error) {
+    next(error);
+  }
 });
 
 //2

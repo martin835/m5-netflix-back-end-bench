@@ -2,6 +2,13 @@ import express from "express";
 import listEndpoints from "express-list-endpoints";
 import cors from "cors";
 import mediaRouter from "./services/media/index.js";
+import {
+  badRequestHandler,
+  unauthorizedHandler,
+  notFoundHandler,
+  genericErrorHandler,
+} from "./errorHandlers.js";
+import { join } from "path";
 
 const server = express();
 
@@ -34,11 +41,11 @@ server.use("/media", mediaRouter);
 //server.use("/reviews", reviewsRouter);
 
 // ********************************** ERROR HANDLERS *********************************
-/* 
+
 server.use(badRequestHandler);
 server.use(unauthorizedHandler);
 server.use(notFoundHandler);
-server.use(genericErrorHandler) */
+server.use(genericErrorHandler);
 
 console.table(listEndpoints(server));
 
