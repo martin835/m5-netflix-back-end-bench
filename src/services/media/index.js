@@ -9,8 +9,9 @@ import { newMediaValidation } from "./validations.js";
 import multer from "multer";
 import { extname } from "path";
 import { getMedia, writeMedia } from "../../lib/fs-tools.js";
-import { saveCoversPictures } from "../../lib/fs-tools.js";
+import { savePostersPictures } from "../../lib/fs-tools.js";
 import { update } from "tar";
+import { write } from "fs";
 
 const mediaRouter = express.Router();
 //1
@@ -100,9 +101,43 @@ mediaRouter.delete("/:oneMediaId", async (req, res) => {
 //6 - upload cover image for media
 
 mediaRouter.patch(
-  "/:oneMediaId/cover",
-  /* multer().single("cover") */
-  async (req, res, next) => {}
+  "/:oneMediaId/poster",
+  multer().single("poster"),
+  async (req, res, next) => {
+    try {
+      console.log("FILE: ", req.file);
+      await savePostersPictures(
+        req.params.oneMediaId + extname(req.file.originalname),
+        req.file.buffer
+      );
+      res.send({ message: "file uploaded" });
+    } catch (error) {
+      next(error);
+    }
+
+    const mediaArray = await getMedia();
+
+    const index = mediaArray.findIndex(
+      (medium) => medium.imdbID === req.params.oneMediaId
+    );
+    const oldMedium = mediaArray[index];
+
+    //this shouldn't be path, but URL  ⬇️⬇️⬇️⬇️
+    const posterUrl =
+      "http://localhost:3001/public/img/posters/" +
+      req.params.oneMediaId +
+      extname(req.file.originalname);
+
+    const updatedMedium = {
+      ...oldMedium,
+      Poster: posterUrl,
+      updatedAt: new Date(),
+    };
+
+    mediaArray[index] = updatedMedium;
+
+    await writeMedia(mediaArray);
+  }
 );
 
 //7 - send confirmation email to author when oneMedia is created

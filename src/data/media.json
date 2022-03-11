@@ -3,9 +3,10 @@
     "Title": "grow impactful initiatives",
     "Year": "1990",
     "Type": "movie",
-    "Poster": "http://placeimg.com/640/480/sports",
+    "Poster": "http://localhost:3001/public/img/posters/eabenr2qcl0mbnk2d.jpg",
     "createdAt": "2022-03-11T11:14:36.757Z",
-    "imdbID": "eabenr2qcl0mbnk2d"
+    "imdbID": "eabenr2qcl0mbnk2d",
+    "updatedAt": "2022-03-11T12:56:22.240Z"
   },
   {
     "Title": "architect sticky web-readiness",
