@@ -14,6 +14,7 @@ import { update } from "tar";
 import { write } from "fs";
 
 const mediaRouter = express.Router();
+
 //1
 mediaRouter.post("/", newMediaValidation, async (req, res, next) => {
   console.log("this is request post media: ");
@@ -139,7 +140,7 @@ mediaRouter.patch(
   }
 );
 
-// add comments to a medium
+//7 add comments to a medium
 mediaRouter.put("/:oneMediaId/comment", async (req, res, next) => {
   try {
     /* const { text, userName } = req.body; */
@@ -177,6 +178,56 @@ mediaRouter.put("/:oneMediaId/comment", async (req, res, next) => {
     console.log(error);
     res.send(500).send({ message: error.message });
   }
+});
+
+//8 delete a comment
+
+mediaRouter.delete(
+  "/:oneMediaId/comment/:commentId.",
+  async (req, res, next) => {
+    console.log("this is requested  one comment: ", req.params);
+    const mediaArray = await getMedia();
+
+    const mediumIndex = mediaArray.findIndex(
+      (medium) => medium.imdbID === req.params.oneMediaId
+    );
+    if (!mediumIndex == -1) {
+      res.status(404).send({
+        message: `medium with ${req.params.oneMediaId} is not found!`,
+      });
+    }
+    let oldMedium = mediaArray[mediumIndex];
+
+    const remainingMediaComments = oldMedium.comments.filter(
+      (comment) => comment.elementId !== req.params.commentId
+    );
+
+    oldMedium.comments = remainingMediaComments;
+
+    const updatedMedium = { ...oldMedium };
+
+    mediaArray[mediumIndex] = updatedMedium;
+    await writeMedia(mediaArray);
+
+    res.status(204).send();
+  }
+);
+
+//9 get a comment
+
+mediaRouter.get("/:oneMediaId/:commentId.", async (req, res, next) => {
+  console.log("this is requested comment: ", req.params.oneMediaId);
+  const media = await getMedia();
+
+  const foundmedia = media.find(
+    (media) => media.imdbID === req.params.oneMediaId
+  );
+
+  const foundComment = foundmedia.comments.find(
+    (comment) => comment.elementId === req.params.commentId
+  );
+
+  res.send(foundComment);
 });
 
 //7 - send confirmation email to author when oneMedia is created
